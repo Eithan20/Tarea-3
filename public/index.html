@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gestor de Tareas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>📋 Gestor de Tareas</h1>
+    <p>Proyecto CRUD — Tarea 3 de Programación III (Git y Git Flow)</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Nueva tarea</h2>
+      <form id="task-form">
+        <input type="text" id="task-title" placeholder="Título de la tarea" required />
+        <button type="submit">Agregar</button>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Mis tareas</h2>
+      <ul id="task-list"></ul>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
