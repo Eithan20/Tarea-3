@@ -1,0 +1,15 @@
+{
+  "name": "gestor-tareas-crud",
+  "version": "1.0.0",
+  "description": "API CRUD de gestión de tareas - Proyecto Tarea 3, Programación III (Git y Git Flow)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
+  },
+  "keywords": ["crud", "express", "git-flow"],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
