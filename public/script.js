@@ -1,11 +1,119 @@
+// ---------- Elementos ----------
+const loginView = document.getElementById('login-view');
+const appView = document.getElementById('app-view');
+const loginForm = document.getElementById('login-form');
+const loginEmail = document.getElementById('login-email');
+const loginPassword = document.getElementById('login-password');
+const loginError = document.getElementById('login-error');
+const welcomeText = document.getElementById('welcome-text');
+const logoutBtn = document.getElementById('logout-btn');
+
 const form = document.getElementById('task-form');
 const input = document.getElementById('task-title');
+const categorySelect = document.getElementById('task-category');
+const categoryForm = document.getElementById('category-form');
+const categoryNameInput = document.getElementById('category-name');
 const list = document.getElementById('task-list');
 const counter = document.getElementById('counter');
 const emptyState = document.getElementById('empty-state');
 const errorMessage = document.getElementById('error-message');
 
 let allTasks = [];
+let allCategories = [];
+
+// ---------- Sesión (token guardado en el navegador) ----------
+
+function getSession() {
+  const raw = localStorage.getItem('session');
+  return raw ? JSON.parse(raw) : null;
+}
+
+function setSession(session) {
+  localStorage.setItem('session', JSON.stringify(session));
+}
+
+function clearSession() {
+  localStorage.removeItem('session');
+}
+
+function showApp(session) {
+  loginView.hidden = true;
+  appView.hidden = false;
+  welcomeText.textContent = `Hola, ${session.user.name} — Programación III`;
+  loadCategories();
+  loadTasks();
+}
+
+function showLogin() {
+  appView.hidden = true;
+  loginView.hidden = false;
+}
+
+loginForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  loginError.hidden = true;
+
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: loginEmail.value.trim(),
+      password: loginPassword.value,
+    }),
+  });
+  const data = await res.json();
+
+  if (!res.ok) {
+    loginError.textContent = data.error || 'No se pudo iniciar sesión.';
+    loginError.hidden = false;
+    return;
+  }
+
+  setSession(data);
+  loginPassword.value = '';
+  showApp(data);
+});
+
+logoutBtn.addEventListener('click', () => {
+  clearSession();
+  showLogin();
+});
+
+// ---------- Categorías ----------
+
+async function loadCategories() {
+  const res = await fetch('/api/categories');
+  allCategories = await res.json();
+
+  categorySelect.innerHTML = '<option value="">Sin categoría</option>';
+  allCategories.forEach((cat) => {
+    const option = document.createElement('option');
+    option.value = cat.id;
+    option.textContent = cat.name;
+    categorySelect.appendChild(option);
+  });
+}
+
+categoryForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const name = categoryNameInput.value.trim();
+  if (!name) return;
+
+  await fetch('/api/categories', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name }),
+  });
+  categoryNameInput.value = '';
+  await loadCategories();
+});
+
+function categoryName(categoryId) {
+  const cat = allCategories.find((c) => c.id === Number(categoryId));
+  return cat ? cat.name : null;
+}
+
+// ---------- Tareas ----------
 
 function showError(message) {
   errorMessage.textContent = message;
@@ -53,6 +161,15 @@ async function loadTasks() {
 
     li.appendChild(checkbox);
     li.appendChild(title);
+
+    const catName = categoryName(task.categoryId);
+    if (catName) {
+      const tag = document.createElement('span');
+      tag.className = 'task-category';
+      tag.textContent = catName;
+      li.appendChild(tag);
+    }
+
     li.appendChild(edit);
     li.appendChild(del);
     list.appendChild(li);
@@ -133,12 +250,20 @@ form.addEventListener('submit', async (e) => {
   await fetch('/api/tasks', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ title }),
+    body: JSON.stringify({ title, categoryId: categorySelect.value || null }),
   });
   input.value = '';
+  categorySelect.value = '';
   loadTasks();
 });
 
 input.addEventListener('input', clearError);
 
-loadTasks();
+// ---------- Arranque ----------
+
+const session = getSession();
+if (session) {
+  showApp(session);
+} else {
+  showLogin();
+}

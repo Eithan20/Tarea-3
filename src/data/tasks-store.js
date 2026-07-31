@@ -17,7 +17,12 @@ function getById(id) {
 }
 
 function create(data) {
-  const task = { id: nextId++, title: data.title, done: Boolean(data.done) || false };
+  const task = {
+    id: nextId++,
+    title: data.title,
+    done: Boolean(data.done) || false,
+    categoryId: data.categoryId ? Number(data.categoryId) : null,
+  };
   tasks.push(task);
   return task;
 }
@@ -27,6 +32,9 @@ function update(id, data) {
   if (!task) return null;
   if (data.title !== undefined) task.title = data.title;
   if (data.done !== undefined) task.done = Boolean(data.done);
+  if (data.categoryId !== undefined) {
+    task.categoryId = data.categoryId ? Number(data.categoryId) : null;
+  }
   return task;
 }
 

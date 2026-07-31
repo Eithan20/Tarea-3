@@ -7,15 +7,48 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>Gestor de Tareas</h1>
-    <p class="subtitle">Proyecto CRUD — Programación III</p>
+
+  <!-- Pantalla de login -->
+  <div class="card" id="login-view">
+    <h1>Iniciar sesión</h1>
+    <p class="subtitle">Gestor de Tareas — Programación III</p>
+
+    <form id="login-form" class="stack-form">
+      <input type="email" id="login-email" placeholder="Correo electrónico" required />
+      <input type="password" id="login-password" placeholder="Contraseña" required />
+      <button type="submit">Entrar</button>
+    </form>
+    <p class="error-message" id="login-error" hidden></p>
+
+    <p class="hint">Usuario de prueba: <code>admin@demo.com</code> / <code>123456</code></p>
+  </div>
+
+  <!-- App principal (oculta hasta iniciar sesión) -->
+  <div class="card" id="app-view" hidden>
+    <div class="app-header">
+      <div>
+        <h1>Gestor de Tareas</h1>
+        <p class="subtitle" id="welcome-text">Proyecto CRUD — Programación III</p>
+      </div>
+      <button id="logout-btn" class="link-btn">Cerrar sesión</button>
+    </div>
 
     <form id="task-form" class="task-form">
       <input type="text" id="task-title" placeholder="Escribe una nueva tarea..." required />
+      <select id="task-category">
+        <option value="">Sin categoría</option>
+      </select>
       <button type="submit">Agregar</button>
     </form>
     <p class="error-message" id="error-message" hidden></p>
+
+    <details class="new-category">
+      <summary>+ Nueva categoría</summary>
+      <form id="category-form" class="inline-form">
+        <input type="text" id="category-name" placeholder="Nombre de la categoría" required />
+        <button type="submit">Crear</button>
+      </form>
+    </details>
 
     <p class="counter" id="counter">0 tareas</p>
 
