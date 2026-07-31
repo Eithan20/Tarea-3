@@ -7,25 +7,22 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header>
-    <h1>📋 Gestor de Tareas</h1>
-    <p>Proyecto CRUD — Tarea 3 de Programación III (Git y Git Flow)</p>
-  </header>
+  <div class="card">
+    <h1>Gestor de Tareas</h1>
+    <p class="subtitle">Proyecto CRUD — Programación III</p>
 
-  <main>
-    <section class="card">
-      <h2>Nueva tarea</h2>
-      <form id="task-form">
-        <input type="text" id="task-title" placeholder="Título de la tarea" required />
-        <button type="submit">Agregar</button>
-      </form>
-    </section>
+    <form id="task-form" class="task-form">
+      <input type="text" id="task-title" placeholder="Escribe una nueva tarea..." required />
+      <button type="submit">Agregar</button>
+    </form>
+    <p class="error-message" id="error-message" hidden></p>
 
-    <section class="card">
-      <h2>Mis tareas</h2>
-      <ul id="task-list"></ul>
-    </section>
-  </main>
+    <p class="counter" id="counter">0 tareas</p>
+
+    <ul id="task-list" class="task-list"></ul>
+
+    <p class="empty-state" id="empty-state" hidden>No tienes tareas todavía.</p>
+  </div>
 
   <script src="script.js"></script>
 </body>

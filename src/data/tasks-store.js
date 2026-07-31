@@ -4,6 +4,10 @@ let tasks = [
 ];
 let nextId = 3;
 
+function getByTitle(title) {
+  return tasks.find((t) => t.title.trim().toLowerCase() === title.trim().toLowerCase());
+}
+
 function getAll() {
   return tasks;
 }
@@ -33,4 +37,4 @@ function remove(id) {
   return true;
 }
 
-module.exports = { getAll, getById, create, update, remove };
+module.exports = { getAll, getById, getByTitle, create, update, remove };
